@@ -1,5 +1,7 @@
 package BinaryTree;
 
+import com.sun.source.tree.Tree;
+
 import java.util.ArrayDeque;
 
 public class pathsum_lc112 {
@@ -18,48 +20,64 @@ public class pathsum_lc112 {
 
     public static void main(String[] args) {
 
-        // Tree: [1,2,3]
-        TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(2);
-        root.right = new TreeNode(3);
+        // Constructing the tree
+        TreeNode root = new TreeNode(5);
 
-        int targetSum = 5;
+        root.left = new TreeNode(4);
+        root.right = new TreeNode(8);
 
-        pathsum_lc112 sol = new pathsum_lc112();
-        boolean result = sol.hasPathSum(root, targetSum);
+        root.left.left = new TreeNode(11);
+        root.left.left.left = new TreeNode(7);
+        root.left.left.right = new TreeNode(2);
 
-        System.out.println(result);  // Expected: false
+        root.right.left = new TreeNode(13);
+        root.right.right = new TreeNode(4);
+
+        int targetSum = 22;
+
+        System.out.println(hasPathSum(root, targetSum)); // expected: true
     }
 
 
-    private boolean hasPathSum(TreeNode root, int targetSum) {
+    //recursive approach
+    public static boolean hasPathSum(TreeNode root , int targetSum) {
         if (root == null) return false;
-        ArrayDeque<TreeNode> node_stack = new ArrayDeque<>();
-        ArrayDeque<Integer> sum_stack = new ArrayDeque<>();
 
-        node_stack.add(root);
-        sum_stack.add(targetSum - root.val);
+        if (root.val == targetSum && root.left == null && root.right == null) return true;
 
-        while (!node_stack.isEmpty()) {
-            TreeNode current_node =  node_stack.pop();
-            int current_sum = sum_stack.pop();
 
-            if (current_node.left == null && current_node.right == null && current_sum == 0) {
-                return true;
-            }
-
-            if (current_node.left != null) {
-                node_stack.add(current_node.left);
-                sum_stack.add(current_sum - current_node.left.val);
-            }
-
-            if (current_node.right != null) {
-                node_stack.add(current_node.right);
-                sum_stack.add(current_sum - current_node.right.val);
-            }
-        }
-        return false;
+        return hasPathSum(root.left , targetSum-root.val) || hasPathSum(root.right , targetSum- root.val);
     }
+
+    //itterative approach
+//    private boolean hasPathSum(TreeNode root, int targetSum) {
+//        if (root == null) return false;
+//        ArrayDeque<TreeNode> node_stack = new ArrayDeque<>();
+//        ArrayDeque<Integer> sum_stack = new ArrayDeque<>();
+//
+//        node_stack.add(root);
+//        sum_stack.add(targetSum - root.val);
+//
+//        while (!node_stack.isEmpty()) {
+//            TreeNode current_node =  node_stack.pop();
+//            int current_sum = sum_stack.pop();
+//
+//            if (current_node.left == null && current_node.right == null && current_sum == 0) {
+//                return true;
+//            }
+//
+//            if (current_node.left != null) {
+//                node_stack.add(current_node.left);
+//                sum_stack.add(current_sum - current_node.left.val);
+//            }
+//
+//            if (current_node.right != null) {
+//                node_stack.add(current_node.right);
+//                sum_stack.add(current_sum - current_node.right.val);
+//            }
+//        }
+//        return false;
+//    }
 
 
 }
